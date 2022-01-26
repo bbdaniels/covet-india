@@ -35,6 +35,13 @@ use "${git}/data/covet.dta" if complete > 0, clear
   
   gen correct = (dr_4  == 1 | re_1 == 1 | re_3 == 1 | re_4 == 1 | re_5 == 1)
   lab var correct "Correct"
+  
+  anycat med_k_
+  
+  destring med_l_? , replace force
+    lab def med_l 1 "Anti-TB Meds" 2 "Quinolones" 3 "Antibiotics"
+    lab val med_l_? med_l
+  anycat med_l_
     
 save "${git}/data/covet.dta" , replace
 
