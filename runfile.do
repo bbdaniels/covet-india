@@ -5,4 +5,6 @@
 global box "/Users/bbdaniels/Library/CloudStorage/Box-Box/COVET/Standardized Patients/Patna/"
 global git "/Users/bbdaniels/GitHub/covet-india"
 
+run "${git}/do/anycat.ado"
+
 // End
