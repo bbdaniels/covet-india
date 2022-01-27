@@ -42,6 +42,8 @@ use "${git}/data/covet.dta" if complete > 0, clear
     lab def med_l 1 "Anti-TB Meds" 2 "Quinolones" 3 "Antibiotics"
     lab val med_l_? med_l
   anycat med_l_
+  
+  egen checklist = rowmean(h_? h_??)
     
 save "${git}/data/covet.dta" , replace
 
