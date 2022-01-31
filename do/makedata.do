@@ -44,6 +44,18 @@ use "${git}/data/covet.dta" if complete > 0, clear
   anycat med_l_
   
   egen checklist = rowmean(h_? h_??)
+  
+// Data construction
+
+egen ppe = rsum(ppe_1 ppe_2 ppe_3 ppe_4 ppe_5 ppe_6 ppe_7 ppe_8)
+egen cov = rsum(cov_6 cov_7 cov_8 cov_9 cov_10 cov_11 cov_12 cov_13 cov_14 cov_15 cov_16)
+egen checkr = cut(checklist) , at(0 .10 .20 .30 .40 .50 .60 .70 .80 .90 1)
+egen q2 = cut(quality) , at(0 .10 .20 .30 .40 .50 .60 .70 .80 .90 1)
+  replace q2 = q2*10
+  lab var q2 "Prior Quality (0-10)"
+tab ppe_9, gen(mask)
+
+// Save
     
 save "${git}/data/covet.dta" , replace
 

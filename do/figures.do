@@ -1,14 +1,7 @@
-// Figures for COVET quick hit
+// Figures for COVET PPE paper
 
 // Data
 use "${git}/data/covet.dta" , clear
-
-egen ppe = rsum(ppe_1 ppe_2 ppe_3 ppe_4 ppe_5 ppe_6 ppe_7 ppe_8)
-egen cov = rsum(cov_6 cov_7 cov_8 cov_9 cov_10 cov_11 cov_12 cov_13 cov_14 cov_15 cov_16)
-egen checkr = cut(checklist) , at(0 .10 .20 .30 .40 .50 .60 .70 .80 .90 1)
-egen q2 = cut(quality) , at(0 .10 .20 .30 .40 .50 .60 .70 .80 .90 1)
-  replace q2 = q2*10
-tab ppe_9, gen(mask)
 
 // Figure. PPE and Screening
 betterbarci ///
@@ -128,28 +121,38 @@ betterbarci ///
 // Figure. Quality and correctness
 
 tw ///
-   (fpfit correct q2 if ppe_9 == 0 , lw(thick) lc(navy%20)) ///
-   (fpfit correct q2 if ppe_9 == 1 , lw(thick) lc(navy%40)) ///
-   (fpfit correct q2 if ppe_9 == 2 , lw(thick) lc(navy%80)) ///
-   (fpfit correct q2 if ppe_9 == 3 , lw(thick) lc(navy)) ///
-   (histogram q2 , fc(gs14) s(0) w(1) lc(none) barw(0.9) discrete) ///
- , title("TB Management", pos(11) span) legend(on c(1) size(small) pos(11) ring(0) region(lc(none)) ///
+   (lfit correct q2 if ppe_9 == 0 , lw(thick) lc(navy%20)) ///
+   (lfit correct q2 if ppe_9 == 1 , lw(thick) lc(navy%40)) ///
+   (lfit correct q2 if ppe_9 == 2 , lw(thick) lc(navy%80)) ///
+   (lfit correct q2 if ppe_9 == 3 , lw(thick) lc(navy)) ///
+ , by(casex, iyaxes title("TB Management", pos(11) span) note(" ") legend(off)) ///
+   legend(off r(1) size(small) pos(11) ring(0) region(lc(none)) ///
      order(1 "No Mask" 2 "Cloth" 3 "Surgical" 4 "N95" )) ///
    xtit("Past quality index") xlab(0(1)10) ///
-   ytit(" ") ylab(0 "0%" .25 "25%" .5 "50%" .75 "75%" 1 "100%") 
+   ytit(" ") ylab(0 "0%" .25 "25%" .5 "50%" .75 "75%" 1 "100%")  
    
-   graph export "${git}/outputs/f5-mask-correct.png" , width(2000) replace
+   graph save "${git}/temp/f5-mask-1.gph" , replace
    
    
 tw ///
-   (fpfit dr_cov2 q2 if ppe_9 == 0 , lw(thick) lc(navy%20)) ///
-   (fpfit dr_cov2 q2 if ppe_9 == 1 , lw(thick) lc(navy%40)) ///
-   (fpfit dr_cov2 q2 if ppe_9 == 2 , lw(thick) lc(navy%80)) ///
-   (fpfit dr_cov2 q2 if ppe_9 == 3 , lw(thick) lc(navy)) ///
- , title("COVID Test", pos(11) span) legend(on c(1) size(small) pos(1) ring(0) region(lc(none)) ///
+   (lfit dr_cov2 q2 if ppe_9 == 0 , lw(thick) lc(navy%20)) ///
+   (lfit dr_cov2 q2 if ppe_9 == 1 , lw(thick) lc(navy%40)) ///
+   (lfit dr_cov2 q2 if ppe_9 == 2 , lw(thick) lc(navy%80)) ///
+   (lfit dr_cov2 q2 if ppe_9 == 3 , lw(thick) lc(navy)) ///
+ , by(casex, iyaxes title("COVID Test", pos(11) span) note(" ") legend(on pos(6))) ///
+   legend(off r(1) size(small) pos(11) ring(0) region(lc(none)) ///
      order(1 "No Mask" 2 "Cloth" 3 "Surgical" 4 "N95" )) ///
-   xtit("Past quality index") xlab(0(1)10) ///
-   ytit(" ") ylab(0 "0%" .05 "5%" .1 "10%" .15 "15%" .2 "20%" .25 "25%") 
+   xtit("Past quality index") xlab(0(1)10) /// 
+   ytit(" ") ylab(0 "0%" .05 "5%" .1 "10%" .15 "15%" .2 "20%")  fysize(55)
+   
+      graph save "${git}/temp/f5-mask-2.gph" , replace
+      
+      
+    graph combine ///
+      "${git}/temp/f5-mask-1.gph" ///
+      "${git}/temp/f5-mask-2.gph" ///
+    , c(1) imargin(tiny) ysize(6)
+    
 
    graph export "${git}/outputs/f5-mask-screen.png" , width(2000) replace
 
