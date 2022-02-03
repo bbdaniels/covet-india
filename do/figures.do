@@ -65,6 +65,12 @@ betterbarci ///
     
   graph export "${git}/outputs/f2-summary.png" , width(2000) replace
   
+
+as;ldkfjas;ldkfjasl;kdf
+asdfhasldkfjaslg
+ahalskjdfhaksldjfh
+adfgadfgasdfjkhasdf
+  
 // Figure. PPE Use
 
   local x = 3
