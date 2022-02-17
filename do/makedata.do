@@ -21,10 +21,11 @@ use "/Users/bbdaniels/Library/CloudStorage/Box-Box/Qutub/REPORTS/2021 EOY/patna_
 
 copy "${box}/data/COVET Patna SP Digital Data Entry.dta" ///
      "${git}/data/covet.dta" , replace
-     
+          
 use "${git}/data/covet.dta" if complete > 0, clear
+  isid submissiondate , sort
   replace casex = 1 in 1/356
-  replace casex = 9 in 357/l
+  replace casex = 9 in 357/707
   
   bys cp_4 casex (submissiondate): gen n = _n
   bys cp_4 casex (submissiondate): gen N = _N
